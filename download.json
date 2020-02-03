@@ -1,0 +1,139 @@
+{
+  "openapi" : "3.0.0",
+  "servers" : [ {
+    "description" : "Mailbox Check",
+    "url" : "http://localhost/"
+  }, {
+    "description" : "Mailbox Check",
+    "url" : "http://localhost/"
+  } ],
+  "info" : {
+    "version" : "1.0.0",
+    "title" : "Mailbox Check",
+    "description" : "Mailbox Check"
+  },
+  "components" : {
+    "securitySchemes" : {
+      "ApiKeyAuth" : {
+        "type" : "apiKey",
+        "in" : "header",
+        "name" : "X-API-KEY"
+      }
+    },
+    "responses" : {
+      "InvalidInput" : {
+        "description" : "The specified resource was not found",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "Unauthorized" : {
+        "description" : "Unauthorized",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    },
+    "schemas" : {
+      "Error" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "message" ]
+      }
+    }
+  },
+  "security" : [ {
+    "ApiKeyAuth" : [ "ASI" ]
+  } ],
+  "paths" : {
+    "/mailbox" : {
+      "post" : {
+        "summary" : "Mailbox Status Check",
+        "responses" : {
+          "405" : {
+            "description" : "Invalid input",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/responses/InvalidInput"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result" : {
+                      "type" : "integer",
+                      "description" : "The Result.",
+                      "example" : 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UnauthorizedError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/responses/Unauthorized"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "ApiKeyAuth" : [ ]
+        } ],
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "date" : {
+                    "type" : "string"
+                  },
+                  "block" : {
+                    "type" : "string"
+                  },
+                  "floor" : {
+                    "type" : "string"
+                  },
+                  "flat" : {
+                    "type" : "string"
+                  },
+                  "flag" : {
+                    "type" : "integer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
